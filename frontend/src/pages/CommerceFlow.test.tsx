@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { CartProvider, useCart } from "../store/CartContext";
@@ -7,9 +7,15 @@ import { products } from "../data/mockData";
 
 function SeedCart() {
   const { addToCart } = useCart();
+  const hasSeededCart = useRef(false);
 
   useEffect(() => {
+    if (hasSeededCart.current) {
+      return;
+    }
+
     addToCart(products[0]);
+    hasSeededCart.current = true;
   }, [addToCart]);
 
   return null;
