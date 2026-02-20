@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+<<<<<<< codex/analyze-website-and-create-react-components-gb5mh5
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { ProductListingPage } from "./ProductListingPage";
 import { ProductDetailsPage } from "./ProductDetailsPage";
@@ -12,15 +13,31 @@ describe("Product pages", () => {
           <ProductListingPage />
         </MemoryRouter>
       </CartProvider>
+=======
+import { MemoryRouter } from "react-router-dom";
+import { ProductListingPage } from "./ProductListingPage";
+import { ProductDetailsPage } from "./ProductDetailsPage";
+
+describe("Product pages", () => {
+  it("renders listing grid", () => {
+    render(
+      <MemoryRouter>
+        <ProductListingPage />
+      </MemoryRouter>
+>>>>>>> main
     );
 
     expect(screen.getByText(/All Jewellery/i)).toBeInTheDocument();
     expect(screen.getAllByText(/View details/i).length).toBeGreaterThan(0);
+<<<<<<< codex/analyze-website-and-create-react-components-gb5mh5
     expect(screen.getAllByRole("button", { name: /Add to cart/i }).length).toBeGreaterThan(0);
+=======
+>>>>>>> main
   });
 
   it("renders details information", () => {
     render(
+<<<<<<< codex/analyze-website-and-create-react-components-gb5mh5
       <CartProvider>
         <MemoryRouter initialEntries={["/product/royal-diamond-ring"]}>
           <Routes>
@@ -28,6 +45,11 @@ describe("Product pages", () => {
           </Routes>
         </MemoryRouter>
       </CartProvider>
+=======
+      <MemoryRouter>
+        <ProductDetailsPage />
+      </MemoryRouter>
+>>>>>>> main
     );
 
     expect(screen.getByText(/Royal Diamond Ring/i)).toBeInTheDocument();
