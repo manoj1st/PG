@@ -4,8 +4,6 @@ import { useCart } from "../../store/CartContext";
 export function MainHeader() {
   const { totalItems } = useCart();
 
-
-export function MainHeader() {
   return (
     <header className="header">
       <div className="container header-row">
