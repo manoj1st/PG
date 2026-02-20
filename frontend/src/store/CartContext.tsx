@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useMemo, useState } from "react";
+import { ReactNode, createContext, useCallback, useContext, useMemo, useState } from "react";
 import { Product } from "../data/mockData";
 
 export type CartItem = Product & { quantity: number };
@@ -17,7 +17,7 @@ const CartContext = createContext<CartContextValue | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const addToCart = (product: Product) => {
+  const addToCart = useCallback((product: Product) => {
     setItems((prev) => {
       const existing = prev.find((item) => item.slug === product.slug);
       if (existing) {
@@ -25,13 +25,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-  };
+  }, []);
 
-  const removeFromCart = (slug: string) => {
+  const removeFromCart = useCallback((slug: string) => {
     setItems((prev) => prev.filter((item) => item.slug !== slug));
-  };
+  }, []);
 
-  const clearCart = () => setItems([]);
+  const clearCart = useCallback(() => setItems([]), []);
 
   const value = useMemo(
     () => ({
@@ -42,7 +42,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       removeFromCart,
       clearCart
     }),
-    [items]
+    [items, addToCart, removeFromCart, clearCart]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
