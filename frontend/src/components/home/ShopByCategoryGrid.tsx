@@ -10,7 +10,7 @@ export function ShopByCategoryGrid() {
           <article key={category.name} className="card">
             <h3>{category.name}</h3>
             <p>{category.description}</p>
-            <Link to="/shop">Browse</Link>
+            <Link to={category.href}>Browse</Link>
           </article>
         ))}
       </div>

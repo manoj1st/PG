@@ -13,9 +13,11 @@ export function MainHeader() {
         <nav className="nav" aria-label="Main">
           <Link to="/">Home</Link>
           <Link to="/shop">Jewellery</Link>
+          <Link to="/shop/gold">Gold</Link>
+          <Link to="/shop/silver">Silver</Link>
+          <Link to="/shop/diamond">Diamond</Link>
           <Link to="/cart">Cart ({totalItems})</Link>
           <Link to="/checkout">Checkout</Link>
-          <Link to="/product/royal-diamond-ring">Featured Product</Link>
         </nav>
       </div>
     </header>
