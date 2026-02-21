@@ -1,4 +1,5 @@
 const express = require("express");
+const productsModule = require("../modules/products");
 
 const apiRouter = express.Router();
 
@@ -27,5 +28,7 @@ apiRouter.get("/meta", (_req, res) => {
     ]
   });
 });
+
+apiRouter.use("/products", productsModule.routes);
 
 module.exports = { apiRouter };

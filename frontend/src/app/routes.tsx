@@ -6,6 +6,9 @@ const HomePage = lazy(() => import("../pages/HomePage").then((module) => ({ defa
 const ProductListingPage = lazy(() =>
   import("../pages/ProductListingPage").then((module) => ({ default: module.ProductListingPage }))
 );
+const GoldPage = lazy(() => import("../pages/GoldPage").then((module) => ({ default: module.GoldPage })));
+const SilverPage = lazy(() => import("../pages/SilverPage").then((module) => ({ default: module.SilverPage })));
+const DiamondPage = lazy(() => import("../pages/DiamondPage").then((module) => ({ default: module.DiamondPage })));
 const ProductDetailsPage = lazy(() =>
   import("../pages/ProductDetailsPage").then((module) => ({ default: module.ProductDetailsPage }))
 );
@@ -29,6 +32,9 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: withSuspense(<HomePage />) },
       { path: "shop", element: withSuspense(<ProductListingPage />) },
+      { path: "shop/gold", element: withSuspense(<GoldPage />) },
+      { path: "shop/silver", element: withSuspense(<SilverPage />) },
+      { path: "shop/diamond", element: withSuspense(<DiamondPage />) },
       { path: "product/:slug", element: withSuspense(<ProductDetailsPage />) },
       { path: "cart", element: withSuspense(<CartPage />) },
       { path: "checkout", element: withSuspense(<CheckoutPage />) }
