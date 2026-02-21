@@ -11,7 +11,7 @@ type ProductFilters = {
   subtype?: string;
 };
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000/api";
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api";
 const REQUEST_TIMEOUT_MS = 450;
 
 let productTypesCache: ProductTypeConfig[] | null = null;
