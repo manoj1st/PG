@@ -1,6 +1,5 @@
 # Kwality Jewellers-style Platform Blueprint (React + Node)
 
-<<<<<<< codex/analyze-website-and-create-react-components-gb5mh5
 This repo contains a practical fullstack starter for a professional jewellery storefront experience.
 
 ## Frontend delivered
@@ -12,31 +11,21 @@ This repo contains a practical fullstack starter for a professional jewellery st
   - Product details page
   - Cart page
   - Checkout page
-- Product grid now shows pricing and an **Add to cart** action on every card.
-- Shared cart state using React context.
+  - Login / Signup flow
+- Shared auth/cart state and API service layers.
 - Test setup with Vitest + Testing Library.
 
 ## Backend delivered
 
-- Node.js + Express modular API skeleton with health/meta routes.
-=======
-This repo now contains a practical fullstack starter for building a professional jewellery website inspired by Kwality-style UX patterns.
-
-## Frontend delivered
-
-- React + Vite application scaffold with routing and global styles.
-- Complete page composition for:
-  - Home page
-  - Product listing page
-  - Product details page
-- Pages are built using the existing micro-components (`layout`, `common`, `home`, `product`).
-- Mock data layer for categories, trust badges, and products.
-- Test setup with Vitest + Testing Library and page-level tests.
-
-## Backend delivered
-
-- Node.js + Express modular API skeleton with domain modules and health/meta routes.
->>>>>>> main
+- Node.js + Express API with multi-tenant SaaS-style design.
+- Two route groups:
+  - `public` routes for org discovery, catalog browsing, signup/login, OTP verification.
+  - `secure` routes for authenticated profile, users, and customers.
+- Tenant isolation via `x-org-id` header (or `orgId` query fallback).
+- JSON file (`backend/src/data/sample-db.json`) currently acts as data store for multiple organizations.
+- Added additional tenant data for `shivshankar-jewelers` (ShivShankar Jewelers) in sample DB.
+- Frontend can switch active organization by opening routes with `?orgId=<tenant-id>` (for example `http://localhost:5173/shop/gold?orgId=shivshankar-jewelers`) while backend runs on `http://localhost:5000`.
+- Backward-compatible `/api/products*` routes retained for current frontend integration.
 
 ## Run locally
 
@@ -44,6 +33,9 @@ This repo now contains a practical fullstack starter for building a professional
 cd frontend
 npm install
 npm run dev
+# or run tenant-specific frontends
+npm run dev1  # kwality-jewellers on :5173
+npm run dev2  # shivshankar-jewelers on :5174
 npm run test
 ```
 

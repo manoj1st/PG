@@ -2,17 +2,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { productTypeConfigs } from "../../data/mockData";
 import { useCart } from "../../store/CartContext";
 import { useAuth } from "../../store/AuthContext";
+import { useOrganization } from "../../store/OrganizationContext";
 
 export function MainHeader() {
   const { totalItems } = useCart();
   const { isAuthenticated, logout } = useAuth();
+  const { organization } = useOrganization();
   const navigate = useNavigate();
 
   return (
     <header className="header">
       <div className="container header-row">
         <Link className="brand" to="/">
-          KWALITY JEWELLERS
+          {organization.name.toUpperCase()}
         </Link>
         <nav className="nav" aria-label="Main">
           <Link to="/">Home</Link>

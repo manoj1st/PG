@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "dev1": "node scripts/dev-tenant.mjs kwality-jewellers 5173",
+    "dev2": "node scripts/dev-tenant.mjs shivshankar-jewelers 5174"
   },
   "dependencies": {
     "react": "^18.3.1",

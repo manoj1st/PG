@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
+import { getOrgScopedStorageKey } from "../utils/tenant";
 
 type AuthContextValue = {
   isAuthenticated: boolean;
@@ -7,16 +8,20 @@ type AuthContextValue = {
   identifier: string;
 };
 
-const STORAGE_KEY = "kwality-auth";
+const STORAGE_KEY_BASE = "kwality-auth";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+function getStorageKey() {
+  return getOrgScopedStorageKey(STORAGE_KEY_BASE);
+}
 
 function getInitialAuthState() {
   if (typeof window === "undefined") {
     return { isAuthenticated: false, identifier: "" };
   }
 
-  const storedValue = window.localStorage.getItem(STORAGE_KEY);
+  const storedValue = window.localStorage.getItem(getStorageKey());
   if (!storedValue) {
     return { isAuthenticated: false, identifier: "" };
   }
@@ -33,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(true);
     setIdentifier(identifierValue);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(STORAGE_KEY, identifierValue);
+      window.localStorage.setItem(getStorageKey(), identifierValue);
     }
   };
 
@@ -41,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
     setIdentifier("");
     if (typeof window !== "undefined") {
-      window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.removeItem(getStorageKey());
     }
   };
 
