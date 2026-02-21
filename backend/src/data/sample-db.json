@@ -8,9 +8,36 @@
         "timezone": "Asia/Kolkata"
       },
       "productTypes": [
-        { "type": "gold", "label": "Gold", "subtypes": ["Rings", "Necklaces", "Chains", "Coins"] },
-        { "type": "silver", "label": "Silver", "subtypes": ["Rings", "Bracelets", "Anklets", "Coins"] },
-        { "type": "diamond", "label": "Diamond", "subtypes": ["Rings", "Necklaces", "Earrings", "Bracelets"] }
+        {
+          "type": "gold",
+          "label": "Gold",
+          "subtypes": [
+            "Rings",
+            "Necklaces",
+            "Chains",
+            "Coins"
+          ]
+        },
+        {
+          "type": "silver",
+          "label": "Silver",
+          "subtypes": [
+            "Rings",
+            "Bracelets",
+            "Anklets",
+            "Coins"
+          ]
+        },
+        {
+          "type": "diamond",
+          "label": "Diamond",
+          "subtypes": [
+            "Rings",
+            "Necklaces",
+            "Earrings",
+            "Bracelets"
+          ]
+        }
       ],
       "products": [
         {
@@ -75,8 +102,22 @@
         "timezone": "Asia/Kolkata"
       },
       "productTypes": [
-        { "type": "diamond", "label": "Diamond", "subtypes": ["Rings", "Pendants"] },
-        { "type": "platinum", "label": "Platinum", "subtypes": ["Bands", "Chains"] }
+        {
+          "type": "diamond",
+          "label": "Diamond",
+          "subtypes": [
+            "Rings",
+            "Pendants"
+          ]
+        },
+        {
+          "type": "platinum",
+          "label": "Platinum",
+          "subtypes": [
+            "Bands",
+            "Chains"
+          ]
+        }
       ],
       "products": [
         {
@@ -97,6 +138,93 @@
           "fullName": "Aurora Admin",
           "email": "admin@aurora.test",
           "mobileNumber": "9888888888",
+          "role": "admin"
+        }
+      ],
+      "customers": []
+    },
+    {
+      "id": "shivshankar-jewelers",
+      "name": "ShivShankar Jewelers",
+      "settings": {
+        "currency": "INR",
+        "timezone": "Asia/Kolkata"
+      },
+      "productTypes": [
+        {
+          "type": "gold",
+          "label": "Gold",
+          "subtypes": [
+            "Rings",
+            "Bangles",
+            "Chains",
+            "Coins"
+          ]
+        },
+        {
+          "type": "silver",
+          "label": "Silver",
+          "subtypes": [
+            "Pooja Items",
+            "Anklets",
+            "Coins",
+            "Bracelets"
+          ]
+        },
+        {
+          "type": "diamond",
+          "label": "Diamond",
+          "subtypes": [
+            "Rings",
+            "Earrings",
+            "Pendants",
+            "Necklaces"
+          ]
+        }
+      ],
+      "products": [
+        {
+          "id": "p-ss-001",
+          "slug": "shivshankar-bridal-necklace",
+          "title": "ShivShankar Bridal Necklace",
+          "type": "gold",
+          "subtype": "Chains",
+          "weightGrams": 34.5,
+          "makingCost": 38000,
+          "price": 286000,
+          "compareAt": 305000,
+          "image": "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          "id": "p-ss-002",
+          "slug": "shivshankar-diamond-pendant",
+          "title": "ShivShankar Diamond Pendant",
+          "type": "diamond",
+          "subtype": "Pendants",
+          "weightGrams": 5.1,
+          "makingCost": 18000,
+          "price": 158000,
+          "compareAt": 171000,
+          "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          "id": "p-ss-003",
+          "slug": "shivshankar-silver-pooja-coin",
+          "title": "ShivShankar Silver Pooja Coin",
+          "type": "silver",
+          "subtype": "Coins",
+          "weightGrams": 20.0,
+          "makingCost": 1500,
+          "price": 12300,
+          "image": "https://images.unsplash.com/photo-1627295113228-69adf995b4d5?auto=format&fit=crop&w=800&q=80"
+        }
+      ],
+      "users": [
+        {
+          "id": "u-ss-001",
+          "fullName": "Shiv Admin",
+          "email": "admin@shivshankar.test",
+          "mobileNumber": "9777777777",
           "role": "admin"
         }
       ],

@@ -12,10 +12,17 @@ type ProductFilters = {
 };
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api";
-const REQUEST_TIMEOUT_MS = 450;
+const DEFAULT_ORG_ID = import.meta.env.VITE_ORG_ID ?? "kwality-jewellers";
+const REQUEST_TIMEOUT_MS = 1200;
 
-let productTypesCache: ProductTypeConfig[] | null = null;
+const productTypesCache = new Map<string, ProductTypeConfig[]>();
 const productsCache = new Map<string, Product[]>();
+
+function getActiveOrgId() {
+  if (typeof window === "undefined") return DEFAULT_ORG_ID;
+  const queryOrgId = new URLSearchParams(window.location.search).get("orgId");
+  return queryOrgId || DEFAULT_ORG_ID;
+}
 
 function withQuery(path: string, filters: ProductFilters) {
   const params = new URLSearchParams();
@@ -38,8 +45,17 @@ async function fetchJsonWithTimeout<T>(url: string): Promise<T> {
   const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
-    const response = await fetch(url, { signal: controller.signal });
-    if (!response.ok) throw new Error("Request failed");
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        "x-org-id": getActiveOrgId()
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+
     return response.json();
   } finally {
     window.clearTimeout(timeoutId);
@@ -47,20 +63,23 @@ async function fetchJsonWithTimeout<T>(url: string): Promise<T> {
 }
 
 export async function getProductTypes(): Promise<ProductTypeConfig[]> {
-  if (productTypesCache) return productTypesCache;
+  const orgId = getActiveOrgId();
+  const cached = productTypesCache.get(orgId);
+  if (cached) return cached;
 
   try {
     const types = await fetchJsonWithTimeout<ProductTypeConfig[]>(`${API_BASE}/products/types`);
-    productTypesCache = types;
+    productTypesCache.set(orgId, types);
     return types;
   } catch {
-    productTypesCache = fallbackTypes;
+    productTypesCache.set(orgId, fallbackTypes);
     return fallbackTypes;
   }
 }
 
 export async function getProducts(filters: ProductFilters = {}): Promise<Product[]> {
-  const cacheKey = `${filters.type ?? "all"}:${filters.subtype ?? "all"}`;
+  const orgId = getActiveOrgId();
+  const cacheKey = `${orgId}:${filters.type ?? "all"}:${filters.subtype ?? "all"}`;
   const cached = productsCache.get(cacheKey);
   if (cached) return cached;
 

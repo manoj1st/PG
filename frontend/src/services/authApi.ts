@@ -36,7 +36,7 @@ type OtpDispatchResult = {
 
 const DUMMY_OTP = "123456";
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api";
-const ORG_ID = import.meta.env.VITE_ORG_ID ?? "kwality-jewellers";
+const DEFAULT_ORG_ID = import.meta.env.VITE_ORG_ID ?? "kwality-jewellers";
 
 const wait = (duration = 250) => new Promise((resolve) => setTimeout(resolve, duration));
 
@@ -46,12 +46,31 @@ const maskEmail = (value: string) => {
   return `${name.slice(0, 2)}***@${domain}`;
 };
 
+function getActiveOrgId() {
+  if (typeof window === "undefined") return DEFAULT_ORG_ID;
+  const queryOrgId = new URLSearchParams(window.location.search).get("orgId");
+  return queryOrgId || DEFAULT_ORG_ID;
+}
+
+function toChallengeId(prefix: string, identifier: string) {
+  return `${prefix}:${btoa(identifier)}`;
+}
+
+function fromChallengeId(challengeId: string) {
+  const encoded = challengeId.split(":")[1] || "";
+  try {
+    return atob(encoded);
+  } catch {
+    return "";
+  }
+}
+
 async function postJson<T>(path: string, body: unknown): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-org-id": ORG_ID
+      "x-org-id": getActiveOrgId()
     },
     body: JSON.stringify(body)
   });
@@ -69,10 +88,7 @@ export async function signup(payload: SignupPayload): Promise<AuthResult> {
     return { success: response.success, message: response.message };
   } catch {
     await wait();
-    return {
-      success: true,
-      message: `Welcome ${payload.fullName}. Base profile captured successfully.`
-    };
+    return { success: true, message: `Welcome ${payload.fullName}. Base profile captured successfully.` };
   }
 }
 
@@ -84,7 +100,7 @@ export async function sendSignupOtps(payload: SignupPayload): Promise<OtpDispatc
     message: "OTP sent to your registered mobile number.",
     challenges: [
       {
-        challengeId: `signup-mobile-${payload.mobileNumber}`,
+        challengeId: toChallengeId("signup-mobile", payload.mobileNumber),
         channel: "mobile",
         destination: payload.mobileNumber,
         maskedDestination: maskMobile(payload.mobileNumber),
@@ -100,10 +116,7 @@ export async function login(payload: LoginPayload): Promise<AuthResult> {
     return { success: response.success, message: response.message };
   } catch {
     await wait();
-    return {
-      success: true,
-      message: `Identity found for ${payload.identifier}.`
-    };
+    return { success: true, message: `Identity found for ${payload.identifier}.` };
   }
 }
 
@@ -118,7 +131,7 @@ export async function sendLoginOtp(payload: LoginPayload): Promise<OtpDispatchRe
     message: `OTP sent to your ${channel}.`,
     challenges: [
       {
-        challengeId: `login-${channel}-${payload.identifier}`,
+        challengeId: toChallengeId(`login-${channel}`, payload.identifier),
         channel,
         destination: payload.identifier,
         maskedDestination: isMobile ? maskMobile(payload.identifier) : maskEmail(payload.identifier),
@@ -129,7 +142,7 @@ export async function sendLoginOtp(payload: LoginPayload): Promise<OtpDispatchRe
 }
 
 export async function verifyOtp(payload: OtpVerificationPayload): Promise<AuthResult> {
-  const identifier = payload.challengeId.split("-").slice(2).join("-");
+  const identifier = fromChallengeId(payload.challengeId);
 
   try {
     const response = await postJson<{ success: boolean; token: string }>("/public/auth/verify-otp", {
@@ -141,23 +154,14 @@ export async function verifyOtp(payload: OtpVerificationPayload): Promise<AuthRe
       window.localStorage.setItem("kwality-token", response.token);
     }
 
-    return {
-      success: response.success,
-      message: "OTP verified successfully."
-    };
+    return { success: response.success, message: "OTP verified successfully." };
   } catch {
     await wait();
 
     if (payload.otp !== DUMMY_OTP) {
-      return {
-        success: false,
-        message: "Invalid OTP. Please enter the demo OTP: 123456"
-      };
+      return { success: false, message: "Invalid OTP. Please enter the demo OTP: 123456" };
     }
 
-    return {
-      success: true,
-      message: `OTP verified for ${payload.challengeId}.`
-    };
+    return { success: true, message: `OTP verified for ${payload.challengeId}.` };
   }
 }
