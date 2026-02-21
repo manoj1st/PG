@@ -33,6 +33,9 @@ This repo contains a practical fullstack starter for a professional jewellery st
 cd frontend
 npm install
 npm run dev
+# or run tenant-specific frontends
+npm run dev1  # kwality-jewellers on :5173
+npm run dev2  # shivshankar-jewelers on :5174
 npm run test
 ```
 

@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "dev1": "VITE_ORG_ID=kwality-jewellers VITE_API_BASE_URL=http://localhost:5000/api vite --port 5173",
+    "dev2": "VITE_ORG_ID=shivshankar-jewelers VITE_API_BASE_URL=http://localhost:5000/api vite --port 5174"
   },
   "dependencies": {
     "react": "^18.3.1",

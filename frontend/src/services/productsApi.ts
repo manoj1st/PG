@@ -5,6 +5,7 @@ import {
   products as fallbackProducts,
   productTypeConfigs as fallbackTypes
 } from "../data/mockData";
+import { getActiveOrgId } from "../utils/tenant";
 
 type ProductFilters = {
   type?: ProductType;
@@ -12,17 +13,10 @@ type ProductFilters = {
 };
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api";
-const DEFAULT_ORG_ID = import.meta.env.VITE_ORG_ID ?? "kwality-jewellers";
 const REQUEST_TIMEOUT_MS = 1200;
 
 const productTypesCache = new Map<string, ProductTypeConfig[]>();
 const productsCache = new Map<string, Product[]>();
-
-function getActiveOrgId() {
-  if (typeof window === "undefined") return DEFAULT_ORG_ID;
-  const queryOrgId = new URLSearchParams(window.location.search).get("orgId");
-  return queryOrgId || DEFAULT_ORG_ID;
-}
 
 function withQuery(path: string, filters: ProductFilters) {
   const params = new URLSearchParams();

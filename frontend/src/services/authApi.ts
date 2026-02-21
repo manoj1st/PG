@@ -1,3 +1,5 @@
+import { getActiveOrgId, getOrgScopedStorageKey } from "../utils/tenant";
+
 export type SignupPayload = {
   fullName: string;
   mobileNumber: string;
@@ -36,7 +38,6 @@ type OtpDispatchResult = {
 
 const DUMMY_OTP = "123456";
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api";
-const DEFAULT_ORG_ID = import.meta.env.VITE_ORG_ID ?? "kwality-jewellers";
 
 const wait = (duration = 250) => new Promise((resolve) => setTimeout(resolve, duration));
 
@@ -45,12 +46,6 @@ const maskEmail = (value: string) => {
   const [name = "", domain = ""] = value.split("@");
   return `${name.slice(0, 2)}***@${domain}`;
 };
-
-function getActiveOrgId() {
-  if (typeof window === "undefined") return DEFAULT_ORG_ID;
-  const queryOrgId = new URLSearchParams(window.location.search).get("orgId");
-  return queryOrgId || DEFAULT_ORG_ID;
-}
 
 function toChallengeId(prefix: string, identifier: string) {
   return `${prefix}:${btoa(identifier)}`;
@@ -151,7 +146,7 @@ export async function verifyOtp(payload: OtpVerificationPayload): Promise<AuthRe
     });
 
     if (response.success && typeof window !== "undefined") {
-      window.localStorage.setItem("kwality-token", response.token);
+      window.localStorage.setItem(getOrgScopedStorageKey("kwality-token"), response.token);
     }
 
     return { success: response.success, message: "OTP verified successfully." };
