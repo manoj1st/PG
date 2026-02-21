@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { App } from "./App";
+import { ProtectedRoute } from "../components/common/ProtectedRoute";
 
 const HomePage = lazy(() => import("../pages/HomePage").then((module) => ({ default: module.HomePage })));
 const ProductListingPage = lazy(() =>
@@ -14,6 +15,8 @@ const ProductDetailsPage = lazy(() =>
 );
 const CartPage = lazy(() => import("../pages/CartPage").then((module) => ({ default: module.CartPage })));
 const CheckoutPage = lazy(() => import("../pages/CheckoutPage").then((module) => ({ default: module.CheckoutPage })));
+const SignupPage = lazy(() => import("../pages/SignupPage").then((module) => ({ default: module.SignupPage })));
+const LoginPage = lazy(() => import("../pages/LoginPage").then((module) => ({ default: module.LoginPage })));
 
 function RouteFallback() {
   return (
@@ -32,12 +35,19 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: withSuspense(<HomePage />) },
       { path: "shop", element: withSuspense(<ProductListingPage />) },
-      { path: "shop/gold", element: withSuspense(<GoldPage />) },
-      { path: "shop/silver", element: withSuspense(<SilverPage />) },
-      { path: "shop/diamond", element: withSuspense(<DiamondPage />) },
       { path: "product/:slug", element: withSuspense(<ProductDetailsPage />) },
-      { path: "cart", element: withSuspense(<CartPage />) },
-      { path: "checkout", element: withSuspense(<CheckoutPage />) }
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: "shop/gold", element: withSuspense(<GoldPage />) },
+          { path: "shop/silver", element: withSuspense(<SilverPage />) },
+          { path: "shop/diamond", element: withSuspense(<DiamondPage />) },
+          { path: "cart", element: withSuspense(<CartPage />) },
+          { path: "checkout", element: withSuspense(<CheckoutPage />) }
+        ]
+      },
+      { path: "signup", element: withSuspense(<SignupPage />) },
+      { path: "login", element: withSuspense(<LoginPage />) }
     ]
   }
 ]);
