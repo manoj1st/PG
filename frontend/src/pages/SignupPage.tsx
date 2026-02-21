@@ -37,7 +37,7 @@ export function SignupPage() {
   return (
     <AuthShell
       title="Create your account"
-      description="Use your details to sign up. Then verify both mobile and email OTP before account activation."
+      description="Use your details to sign up. Email is optional. Verify mobile OTP before account activation."
       footerPrompt="Already have account?"
       footerCtaLabel="Sign in"
       footerCtaTo="/login"
@@ -65,13 +65,12 @@ export function SignupPage() {
           />
           <InputField
             id="signup-email"
-            label="Email"
+            label="Email (Optional)"
             placeholder="you@example.com"
             type="email"
-            value={formData.email}
+            value={formData.email || ""}
             onChange={(event) => updateField("email", event.target.value)}
             autoComplete="email"
-            required
           />
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Creating account..." : "Continue to OTP"}
@@ -79,17 +78,17 @@ export function SignupPage() {
         </form>
       ) : (
         <OtpVerificationForm
-          heading="Verify your account"
-          description="Please verify both OTPs to complete signup."
+          heading="Verify your mobile OTP"
+          description="Please verify mobile OTP to complete signup."
           challenges={otpChallenges}
           onVerified={() => {
             setIsVerified(true);
-            setStatusMessage("Account created and verified successfully.");
+            setStatusMessage("Account created and mobile verified successfully.");
           }}
         />
       )}
       {statusMessage ? <p className="auth-status">{statusMessage}</p> : null}
-      {isVerified ? <p className="auth-status">You can now login with email or mobile OTP.</p> : null}
+      {isVerified ? <p className="auth-status">Signup complete. Please login to access Gold/Silver/Diamond, Cart and Checkout.</p> : null}
     </AuthShell>
   );
 }

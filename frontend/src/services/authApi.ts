@@ -1,7 +1,7 @@
 export type SignupPayload = {
   fullName: string;
   mobileNumber: string;
-  email: string;
+  email?: string;
 };
 
 export type LoginPayload = {
@@ -58,20 +58,13 @@ export async function sendSignupOtps(payload: SignupPayload): Promise<OtpDispatc
 
   return {
     success: true,
-    message: "OTP sent to your registered email and mobile number.",
+    message: "OTP sent to your registered mobile number.",
     challenges: [
       {
         challengeId: `signup-mobile-${payload.mobileNumber}`,
         channel: "mobile",
         destination: payload.mobileNumber,
         maskedDestination: maskMobile(payload.mobileNumber),
-        dummyOtp: DUMMY_OTP
-      },
-      {
-        challengeId: `signup-email-${payload.email}`,
-        channel: "email",
-        destination: payload.email,
-        maskedDestination: maskEmail(payload.email),
         dummyOtp: DUMMY_OTP
       }
     ]

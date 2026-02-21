@@ -1,9 +1,11 @@
 import { FormEvent, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../components/common/Button";
 import { AuthShell } from "../components/common/AuthShell";
 import { InputField } from "../components/common/InputField";
 import { OtpVerificationForm } from "../components/common/OtpVerificationForm";
 import { LoginPayload, OtpChallenge, login, sendLoginOtp } from "../services/authApi";
+import { useAuth } from "../store/AuthContext";
 
 const initialLoginData: LoginPayload = {
   identifier: ""
@@ -14,6 +16,10 @@ export function LoginPage() {
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [otpChallenge, setOtpChallenge] = useState<OtpChallenge[]>([]);
+  const { login: markLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = (location.state as { from?: string } | null)?.from || "/shop/gold";
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -55,7 +61,9 @@ export function LoginPage() {
           description="Enter the OTP sent to your selected login channel."
           challenges={otpChallenge}
           onVerified={() => {
+            markLoggedIn(formData.identifier);
             setStatusMessage("Login successful. OTP verified.");
+            navigate(redirectPath, { replace: true });
           }}
         />
       )}

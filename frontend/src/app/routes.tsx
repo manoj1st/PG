@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { App } from "./App";
+import { ProtectedRoute } from "../components/common/ProtectedRoute";
 
 const HomePage = lazy(() => import("../pages/HomePage").then((module) => ({ default: module.HomePage })));
 const ProductListingPage = lazy(() =>
@@ -34,12 +35,17 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: withSuspense(<HomePage />) },
       { path: "shop", element: withSuspense(<ProductListingPage />) },
-      { path: "shop/gold", element: withSuspense(<GoldPage />) },
-      { path: "shop/silver", element: withSuspense(<SilverPage />) },
-      { path: "shop/diamond", element: withSuspense(<DiamondPage />) },
       { path: "product/:slug", element: withSuspense(<ProductDetailsPage />) },
-      { path: "cart", element: withSuspense(<CartPage />) },
-      { path: "checkout", element: withSuspense(<CheckoutPage />) },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: "shop/gold", element: withSuspense(<GoldPage />) },
+          { path: "shop/silver", element: withSuspense(<SilverPage />) },
+          { path: "shop/diamond", element: withSuspense(<DiamondPage />) },
+          { path: "cart", element: withSuspense(<CartPage />) },
+          { path: "checkout", element: withSuspense(<CheckoutPage />) }
+        ]
+      },
       { path: "signup", element: withSuspense(<SignupPage />) },
       { path: "login", element: withSuspense(<LoginPage />) }
     ]

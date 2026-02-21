@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { productTypeConfigs } from "../../data/mockData";
 import { useCart } from "../../store/CartContext";
+import { useAuth } from "../../store/AuthContext";
 
 export function MainHeader() {
   const { totalItems } = useCart();
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header className="header">
@@ -15,29 +18,44 @@ export function MainHeader() {
           <Link to="/">Home</Link>
           <Link to="/shop">Jewellery</Link>
 
-          {productTypeConfigs.map((typeConfig) => (
-            <div key={typeConfig.type} className="nav-dropdown">
-              <Link to={`/shop/${typeConfig.type}`} className="nav-dropdown-trigger">
-                {typeConfig.label}
-              </Link>
-              <div className="nav-dropdown-menu" role="menu" aria-label={`${typeConfig.label} subtypes`}>
-                {typeConfig.subtypes.map((subtype) => (
-                  <Link
-                    key={subtype}
-                    to={`/shop/${typeConfig.type}?subtype=${encodeURIComponent(subtype)}`}
-                    role="menuitem"
-                  >
-                    {subtype}
+          {isAuthenticated
+            ? productTypeConfigs.map((typeConfig) => (
+                <div key={typeConfig.type} className="nav-dropdown">
+                  <Link to={`/shop/${typeConfig.type}`} className="nav-dropdown-trigger">
+                    {typeConfig.label}
                   </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+                  <div className="nav-dropdown-menu" role="menu" aria-label={`${typeConfig.label} subtypes`}>
+                    {typeConfig.subtypes.map((subtype) => (
+                      <Link
+                        key={subtype}
+                        to={`/shop/${typeConfig.type}?subtype=${encodeURIComponent(subtype)}`}
+                        role="menuitem"
+                      >
+                        {subtype}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))
+            : null}
 
-          <Link to="/cart">Cart ({totalItems})</Link>
-          <Link to="/checkout">Checkout</Link>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign up</Link>
+          {isAuthenticated ? <Link to="/cart">Cart ({totalItems})</Link> : null}
+          {isAuthenticated ? <Link to="/checkout">Checkout</Link> : null}
+
+          {!isAuthenticated ? <Link to="/login">Login</Link> : null}
+          {!isAuthenticated ? <Link to="/signup">Sign up</Link> : null}
+          {isAuthenticated ? (
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+            >
+              Logout
+            </button>
+          ) : null}
         </nav>
       </div>
     </header>
