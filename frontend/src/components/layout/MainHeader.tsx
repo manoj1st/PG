@@ -36,6 +36,8 @@ export function MainHeader() {
 
           <Link to="/cart">Cart ({totalItems})</Link>
           <Link to="/checkout">Checkout</Link>
+          <Link to="/login">Login</Link>
+          <Link to="/signup">Sign up</Link>
         </nav>
       </div>
     </header>
